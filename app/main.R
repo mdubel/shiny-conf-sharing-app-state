@@ -1,13 +1,39 @@
 box::use(
-  shiny[bootstrapPage, moduleServer, NS, renderText, tags, textOutput],
+  shiny[...],
+)
+
+box::use(
+  app/logic/variables[Variables],
+  app/view/scatterplot,
+  app/view/varselect
 )
 
 #' @export
 ui <- function(id) {
   ns <- NS(id)
   bootstrapPage(
-    tags$h3(
-      textOutput(ns("message"))
+    titlePanel("Ames Housing Data Explorer"),
+    fluidRow(
+      column(
+        width = 3,
+        wellPanel(
+          varselect$ui(ns("plot1_vars"))
+        )
+      ),
+      column(
+        width = 3,
+        scatterplot$ui(ns("plot1"))
+      ),
+      column(
+        width = 3,
+        scatterplot$ui(ns("plot2"))
+      ),
+      column(
+        width = 3,
+        wellPanel(
+          varselect$ui(ns("plot2_vars"))
+        )
+      )
     )
   )
 }
@@ -15,6 +41,13 @@ ui <- function(id) {
 #' @export
 server <- function(id) {
   moduleServer(id, function(input, output, session) {
-    output$message <- renderText("Hello!")
+    Variables1 <- Variables$new()
+    Variables2 <- Variables$new()
+
+    varselect$server("plot1_vars", Variables1)
+    varselect$server("plot2_vars", Variables2)
+
+    scatterplot$server("plot1", Variables1)
+    scatterplot$server("plot2", Variables2)
   })
 }
