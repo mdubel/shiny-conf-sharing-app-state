@@ -16,7 +16,7 @@ ui <- function(id) {
 #' @export
 server <- function(id, variables) {
   moduleServer(id, function(input, output, session) {
-    ames <- make_ames()
+    dataset <- make_ames()
 
     plot_labeller <- function(l, varname) {
       if (varname == "Sale_Price") {
@@ -43,8 +43,8 @@ server <- function(id, variables) {
     }
 
     output$plot <- renderPlot({
-      variables$state$trigger
-      scatter_sales(ames, xvar = variables$varX, yvar = variables$varY)
+      variables$triggers$plot
+      scatter_sales(dataset, xvar = variables$varX, yvar = variables$varY)
     })
   })
 }

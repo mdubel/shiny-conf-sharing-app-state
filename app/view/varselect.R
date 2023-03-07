@@ -43,6 +43,7 @@ server <- function(id, variables) {
   moduleServer(id, function(input, output, session) {
     observeEvent(list(input$xvar, input$yvar), {
       variables$set_vars(input$xvar, input$yvar)
+      variables$trigger_plot()
     })
   })
 }
