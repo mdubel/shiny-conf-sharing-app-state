@@ -3,7 +3,8 @@ box::use(
 )
 
 box::use(
-  app/logic/variables[Variables],
+  app/logic/variablesManager[Variables],
+  app/logic/dataManager[DataManager],
   app/view/scatterplot,
   app/view/varselect
 )
@@ -41,13 +42,15 @@ ui <- function(id) {
 #' @export
 server <- function(id) {
   moduleServer(id, function(input, output, session) {
+    DataManager <- DataManager$new()
+
     Variables1 <- Variables$new()
     Variables2 <- Variables$new()
 
     varselect$server("plot1_vars", Variables1)
     varselect$server("plot2_vars", Variables2)
 
-    scatterplot$server("plot1", Variables1)
-    scatterplot$server("plot2", Variables2)
+    scatterplot$server("plot1", Variables1, DataManager)
+    scatterplot$server("plot2", Variables2, DataManager)
   })
 }
